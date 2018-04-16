@@ -19,18 +19,15 @@ $users = Get-AzureADUser -All $true
 
 foreach ($user in $users)
 {
-    if ($user.AssignedLicenses.Count -eq 0)
-    {
-        continue
-    }
+    $objectId = [guid]$user.ObjectId
     $row = $userTable.NewRow()
-    $row['objectId'] = [guid]$user.ObjectId
+    $row['objectId'] = $objectId
     $row['userPrincipalName'] = $user.UserPrincipalName
     $userTable.Rows.Add($row)
     foreach ($license in $user.AssignedLicenses)
     {
         $row = $licenseTable.NewRow()
-        $row['objectId'] = [guid]$user.ObjectId
+        $row['objectId'] = $objectId
         $row['skuId'] = $license.SkuId
         $licenseTable.Rows.Add($row)
     }
